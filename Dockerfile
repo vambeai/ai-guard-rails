@@ -33,16 +33,22 @@ ARG GUARDRAILS_TOKEN
 ENV GUARDRAILS_TOKEN=${GUARDRAILS_TOKEN}
 
 RUN if [ -n "$GUARDRAILS_TOKEN" ]; then \
-        echo "Installing Guardrails validators with authentication..." && \
-        guardrails hub install hub://guardrails/regex_match --quiet || echo "⚠️  Failed to install regex_match" && \
-        guardrails hub install hub://guardrails/competitor_check --quiet || echo "⚠️  Failed to install competitor_check" && \
-        guardrails hub install hub://guardrails/toxic_language --quiet || echo "⚠️  Failed to install toxic_language" && \
-        guardrails hub install hub://guardrails/detect_pii --quiet || echo "⚠️  Failed to install detect_pii" && \
-        guardrails hub install hub://guardrails/secrets_present --quiet || echo "⚠️  Failed to install secrets_present" && \
-        echo "✅ Validator installation complete"; \
+        echo "🔧 Configuring Guardrails Hub with token..." && \
+        mkdir -p /root/.guardrailsrc && \
+        echo "{\"token\": \"$GUARDRAILS_TOKEN\"}" > /root/.guardrailsrc && \
+        echo "✅ Token configured" && \
+        echo "" && \
+        echo "📦 Installing Guardrails validators..." && \
+        guardrails hub install hub://guardrails/regex_match --quiet && echo "  ✓ regex_match installed" || echo "  ⚠️  regex_match failed" && \
+        guardrails hub install hub://guardrails/competitor_check --quiet && echo "  ✓ competitor_check installed" || echo "  ⚠️  competitor_check failed" && \
+        guardrails hub install hub://guardrails/toxic_language --quiet && echo "  ✓ toxic_language installed" || echo "  ⚠️  toxic_language failed" && \
+        guardrails hub install hub://guardrails/detect_pii --quiet && echo "  ✓ detect_pii installed" || echo "  ⚠️  detect_pii failed" && \
+        guardrails hub install hub://guardrails/secrets_present --quiet && echo "  ✓ secrets_present installed" || echo "  ⚠️  secrets_present failed" && \
+        echo "" && \
+        echo "✅ Validator installation complete!"; \
     else \
         echo "⚠️  GUARDRAILS_TOKEN not set - skipping validator installation" && \
-        echo "ℹ️  Validators can be installed at runtime or set GUARDRAILS_TOKEN in Railway"; \
+        echo "ℹ️  Set GUARDRAILS_TOKEN in Railway Variables to enable validators"; \
     fi
 
 # Copy application code
