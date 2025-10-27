@@ -339,6 +339,7 @@ The service supports all validators available in the Guardrails Hub. Here are so
 | `RegexMatch`      | `regex`                          | Validates text matches a regex pattern       |
 | `CompetitorCheck` | `competitors` (list)             | Detects mentions of competitor names         |
 | `ToxicLanguage`   | `threshold`, `validation_method` | Detects toxic/offensive language             |
+| `GibberishText`   | `threshold`, `validation_method` | Detects incoherent/gibberish text            |
 | `DetectPII`       | None                             | Detects personally identifiable information  |
 | `RestrictToTopic` | `valid_topics` (list)            | Ensures text stays on specified topics       |
 | `ReadingTime`     | `max_time`                       | Validates text can be read within time limit |

@@ -43,6 +43,7 @@ RUN if [ -n "$GUARDRAILS_TOKEN" ]; then \
         guardrails hub install hub://guardrails/toxic_language --quiet && echo "  ✓ toxic_language installed" || echo "  ⚠️  toxic_language failed" && \
         guardrails hub install hub://guardrails/detect_pii --quiet && echo "  ✓ detect_pii installed" || echo "  ⚠️  detect_pii failed" && \
         guardrails hub install hub://guardrails/secrets_present --quiet && echo "  ✓ secrets_present installed" || echo "  ⚠️  secrets_present failed" && \
+        guardrails hub install hub://guardrails/gibberish_text --quiet && echo "  ✓ gibberish_text installed" || echo "  ⚠️  gibberish_text failed" && \
         echo "" && \
         echo "✅ Validator installation complete!"; \
     else \

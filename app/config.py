@@ -35,6 +35,7 @@ class ValidatorConfig:
         "RegexMatch": {"regex"},
         "CompetitorCheck": {"competitors"},
         "ToxicLanguage": {"threshold", "validation_method"},
+        "GibberishText": {"threshold", "validation_method"},  # Detects gibberish/incoherent text
         "RestrictToTopic": {"valid_topics"},
         "ReadingTime": {"max_time"},
         "DetectPII": set(),  # No required params, but may have optional ones
