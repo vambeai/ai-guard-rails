@@ -27,16 +27,23 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install common Guardrails validators from Hub
-# These will be available for use in the API
-RUN echo "Installing Guardrails validators..." && \
-    guardrails hub install hub://guardrails/regex_match --quiet || echo "Failed to install regex_match" && \
-    guardrails hub install hub://guardrails/competitor_check --quiet || echo "Failed to install competitor_check" && \
-    guardrails hub install hub://guardrails/toxic_language --quiet || echo "Failed to install toxic_language" && \
-    guardrails hub install hub://guardrails/detect_pii --quiet || echo "Failed to install detect_pii" && \
-    guardrails hub install hub://guardrails/restrict_to_topic --quiet || echo "Failed to install restrict_to_topic" && \
-    guardrails hub install hub://guardrails/secrets_present --quiet || echo "Failed to install secrets_present" && \
-    guardrails hub install hub://guardrails/valid_url --quiet || echo "Failed to install valid_url" && \
-    echo "Validator installation complete"
+# Note: Requires GUARDRAILS_TOKEN environment variable to be set
+# Set this in Railway: Variables -> GUARDRAILS_TOKEN=your_token
+ARG GUARDRAILS_TOKEN
+ENV GUARDRAILS_TOKEN=${GUARDRAILS_TOKEN}
+
+RUN if [ -n "$GUARDRAILS_TOKEN" ]; then \
+        echo "Installing Guardrails validators with authentication..." && \
+        guardrails hub install hub://guardrails/regex_match --quiet || echo "⚠️  Failed to install regex_match" && \
+        guardrails hub install hub://guardrails/competitor_check --quiet || echo "⚠️  Failed to install competitor_check" && \
+        guardrails hub install hub://guardrails/toxic_language --quiet || echo "⚠️  Failed to install toxic_language" && \
+        guardrails hub install hub://guardrails/detect_pii --quiet || echo "⚠️  Failed to install detect_pii" && \
+        guardrails hub install hub://guardrails/secrets_present --quiet || echo "⚠️  Failed to install secrets_present" && \
+        echo "✅ Validator installation complete"; \
+    else \
+        echo "⚠️  GUARDRAILS_TOKEN not set - skipping validator installation" && \
+        echo "ℹ️  Validators can be installed at runtime or set GUARDRAILS_TOKEN in Railway"; \
+    fi
 
 # Copy application code
 COPY ./app ./app

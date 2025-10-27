@@ -24,12 +24,19 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install common Guardrails validators from Hub
-RUN echo "Installing Guardrails validators..." && \
-    guardrails hub install hub://guardrails/regex_match --quiet || echo "Failed to install regex_match" && \
-    guardrails hub install hub://guardrails/competitor_check --quiet || echo "Failed to install competitor_check" && \
-    guardrails hub install hub://guardrails/toxic_language --quiet || echo "Failed to install toxic_language" && \
-    guardrails hub install hub://guardrails/detect_pii --quiet || echo "Failed to install detect_pii" && \
-    echo "Validator installation complete"
+ARG GUARDRAILS_TOKEN
+ENV GUARDRAILS_TOKEN=${GUARDRAILS_TOKEN}
+
+RUN if [ -n "$GUARDRAILS_TOKEN" ]; then \
+        echo "Installing Guardrails validators with authentication..." && \
+        guardrails hub install hub://guardrails/regex_match --quiet || echo "⚠️  Failed to install regex_match" && \
+        guardrails hub install hub://guardrails/competitor_check --quiet || echo "⚠️  Failed to install competitor_check" && \
+        guardrails hub install hub://guardrails/toxic_language --quiet || echo "⚠️  Failed to install toxic_language" && \
+        guardrails hub install hub://guardrails/detect_pii --quiet || echo "⚠️  Failed to install detect_pii" && \
+        echo "✅ Validator installation complete"; \
+    else \
+        echo "⚠️  GUARDRAILS_TOKEN not set - skipping validator installation"; \
+    fi
 
 # Copy application code
 COPY . .
