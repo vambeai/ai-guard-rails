@@ -1,0 +1,198 @@
+{
+  "examples": [
+    {
+      "name": "Regex Match - Phone Number",
+      "description": "Validate that text contains a valid phone number format",
+      "request": {
+        "text": "Call me at 123-456-7890",
+        "guardrails": [
+          {
+            "name": "RegexMatch",
+            "config": {
+              "regex": "\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Regex Match - Email",
+      "description": "Validate that text contains a valid email address",
+      "request": {
+        "text": "Contact me at user@example.com",
+        "guardrails": [
+          {
+            "name": "RegexMatch",
+            "config": {
+              "regex": "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Competitor Check",
+      "description": "Detect mentions of competitor companies",
+      "request": {
+        "text": "Our product is better than what you'll find elsewhere!",
+        "guardrails": [
+          {
+            "name": "CompetitorCheck",
+            "config": {
+              "competitors": ["Apple", "Microsoft", "Google", "Amazon"]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Toxic Language Detection",
+      "description": "Detect toxic or offensive language",
+      "request": {
+        "text": "This is a wonderful product that I really enjoy using!",
+        "guardrails": [
+          {
+            "name": "ToxicLanguage",
+            "config": {
+              "threshold": 0.5,
+              "validation_method": "sentence"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "PII Detection",
+      "description": "Detect personally identifiable information",
+      "request": {
+        "text": "This is a general statement about technology trends.",
+        "guardrails": [
+          {
+            "name": "DetectPII",
+            "config": {}
+          }
+        ]
+      }
+    },
+    {
+      "name": "Multiple Guardrails",
+      "description": "Validate against multiple guardrails simultaneously",
+      "request": {
+        "text": "Our innovative solution provides excellent value.",
+        "guardrails": [
+          {
+            "name": "CompetitorCheck",
+            "config": {
+              "competitors": ["Apple", "Microsoft", "Google"]
+            }
+          },
+          {
+            "name": "ToxicLanguage",
+            "config": {
+              "threshold": 0.5,
+              "validation_method": "sentence"
+            }
+          },
+          {
+            "name": "DetectPII",
+            "config": {}
+          }
+        ]
+      }
+    },
+    {
+      "name": "Topic Restriction",
+      "description": "Ensure text stays on specified topics",
+      "request": {
+        "text": "Python is a powerful programming language for web development.",
+        "guardrails": [
+          {
+            "name": "RestrictToTopic",
+            "config": {
+              "valid_topics": [
+                "technology",
+                "programming",
+                "software development"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Valid Length",
+      "description": "Validate text length is within specified range",
+      "request": {
+        "text": "This is a sample text.",
+        "guardrails": [
+          {
+            "name": "ValidLength",
+            "config": {
+              "min": 10,
+              "max": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Failing Example - Competitor Mention",
+      "description": "Example that should fail due to competitor mention",
+      "request": {
+        "text": "Apple released a new iPhone yesterday.",
+        "guardrails": [
+          {
+            "name": "CompetitorCheck",
+            "config": {
+              "competitors": ["Apple", "Microsoft", "Google"]
+            }
+          }
+        ]
+      },
+      "expected_result": {
+        "passed": false,
+        "failed_guardrails": [
+          {
+            "name": "CompetitorCheck",
+            "error": "Found the following competitors: [['Apple']]. Please avoid naming those competitors next time"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Failing Example - Multiple Failures",
+      "description": "Example that should fail multiple guardrails",
+      "request": {
+        "text": "Shut up! Apple makes terrible products!",
+        "guardrails": [
+          {
+            "name": "CompetitorCheck",
+            "config": {
+              "competitors": ["Apple", "Microsoft", "Google"]
+            }
+          },
+          {
+            "name": "ToxicLanguage",
+            "config": {
+              "threshold": 0.5,
+              "validation_method": "sentence"
+            }
+          }
+        ]
+      },
+      "expected_result": {
+        "passed": false,
+        "failed_guardrails": [
+          {
+            "name": "CompetitorCheck",
+            "error": "Found the following competitors: [['Apple']]"
+          },
+          {
+            "name": "ToxicLanguage",
+            "error": "Toxic language detected"
+          }
+        ]
+      }
+    }
+  ]
+}
