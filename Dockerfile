@@ -34,7 +34,7 @@ ENV GUARDRAILS_TOKEN=${GUARDRAILS_TOKEN}
 
 RUN if [ -n "$GUARDRAILS_TOKEN" ]; then \
         echo "🔧 Configuring Guardrails Hub with token..." && \
-        echo "{\"token\": \"$GUARDRAILS_TOKEN\"}" > /root/.guardrailsrc && \
+        echo "token=$GUARDRAILS_TOKEN" > /root/.guardrailsrc && \
         echo "✅ Token configured" && \
         echo "" && \
         echo "📦 Installing Guardrails validators..." && \
