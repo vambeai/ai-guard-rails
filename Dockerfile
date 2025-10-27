@@ -12,10 +12,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Install system dependencies
+# Install system dependencies (including git for guardrails hub)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     gcc \
+    git \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
@@ -23,6 +25,18 @@ COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Install common Guardrails validators from Hub
+# These will be available for use in the API
+RUN echo "Installing Guardrails validators..." && \
+    guardrails hub install hub://guardrails/regex_match --quiet || echo "Failed to install regex_match" && \
+    guardrails hub install hub://guardrails/competitor_check --quiet || echo "Failed to install competitor_check" && \
+    guardrails hub install hub://guardrails/toxic_language --quiet || echo "Failed to install toxic_language" && \
+    guardrails hub install hub://guardrails/detect_pii --quiet || echo "Failed to install detect_pii" && \
+    guardrails hub install hub://guardrails/restrict_to_topic --quiet || echo "Failed to install restrict_to_topic" && \
+    guardrails hub install hub://guardrails/secrets_present --quiet || echo "Failed to install secrets_present" && \
+    guardrails hub install hub://guardrails/valid_url --quiet || echo "Failed to install valid_url" && \
+    echo "Validator installation complete"
 
 # Copy application code
 COPY ./app ./app
