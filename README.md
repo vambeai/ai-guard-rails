@@ -71,6 +71,27 @@ The service will be available at `http://localhost:8000`
 - API documentation: `http://localhost:8000/docs`
 - Alternative docs: `http://localhost:8000/redoc`
 
+### Docker Deployment
+
+For production deployment, you can use Docker:
+
+```bash
+# Build and start with Docker Compose
+docker-compose up -d
+
+# Or build manually
+docker build -t guardrails-validator .
+docker run -d -p 8000:8000 guardrails-validator
+```
+
+**Development with hot reload:**
+
+```bash
+docker-compose -f docker-compose.dev.yml up
+```
+
+See [DOCKER.md](DOCKER.md) for complete Docker deployment documentation.
+
 ## API Usage
 
 ### Endpoint: `POST /validate`
