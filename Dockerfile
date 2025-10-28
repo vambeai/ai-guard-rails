@@ -26,6 +26,9 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Download required NLTK data for GibberishText validator
+RUN python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('stopwords')"
+
 # Install common Guardrails validators from Hub
 # Note: Requires GUARDRAILS_TOKEN environment variable to be set
 # Set this in Railway: Variables -> GUARDRAILS_TOKEN=your_token
