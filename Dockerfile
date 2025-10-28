@@ -63,6 +63,18 @@ RUN useradd -m -u 1000 appuser && \
 RUN python -c "import nltk; nltk.download('punkt', download_dir='/usr/local/share/nltk_data'); nltk.download('punkt_tab', download_dir='/usr/local/share/nltk_data'); nltk.download('stopwords', download_dir='/usr/local/share/nltk_data')" && \
     chmod -R 755 /usr/local/share/nltk_data
 
+# Copy guardrails config to appuser home for runtime inference
+RUN if [ -f /root/.guardrailsrc ]; then \
+        cp /root/.guardrailsrc /home/appuser/.guardrailsrc && \
+        chown appuser:appuser /home/appuser/.guardrailsrc && \
+        mkdir -p /etc/guardrails && \
+        cp /root/.guardrailsrc /etc/guardrails/.guardrailsrc && \
+        chmod 644 /etc/guardrails/.guardrailsrc; \
+    fi
+
+# Set GUARDRAILS_RC environment variable for runtime
+ENV GUARDRAILS_RC=/home/appuser/.guardrailsrc
+
 # Switch to non-root user
 USER appuser
 
