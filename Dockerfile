@@ -26,9 +26,6 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Download required NLTK data for GibberishText validator
-RUN python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('stopwords')"
-
 # Install common Guardrails validators from Hub
 # Note: Requires GUARDRAILS_TOKEN environment variable to be set
 # Set this in Railway: Variables -> GUARDRAILS_TOKEN=your_token
@@ -60,6 +57,11 @@ COPY ./app ./app
 # Create a non-root user
 RUN useradd -m -u 1000 appuser && \
     chown -R appuser:appuser /app
+
+# Download required NLTK data for GibberishText validator
+# Download to /usr/local/share/nltk_data which is accessible to all users
+RUN python -c "import nltk; nltk.download('punkt', download_dir='/usr/local/share/nltk_data'); nltk.download('punkt_tab', download_dir='/usr/local/share/nltk_data'); nltk.download('stopwords', download_dir='/usr/local/share/nltk_data')" && \
+    chmod -R 755 /usr/local/share/nltk_data
 
 # Switch to non-root user
 USER appuser
