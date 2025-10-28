@@ -10,3 +10,7 @@ nltk>=3.8.1
 transformers>=4.30.0
 torch>=2.0.0
 
+# Dependencies for CorrectLanguage validator
+fastlangdetect>=1.0.3
+iso-language-codes>=0.0.1
+

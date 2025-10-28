@@ -224,7 +224,76 @@ El servicio incluye los siguientes validators pre-instalados:
 
 ---
 
-### 7. SecretsPresent
+### 7. CorrectLanguage
+
+**Propósito:** Valida que el texto esté en el idioma esperado y opcionalmente lo traduce
+
+**Desarrollado por:** SCB 10X
+
+**Configuración Requerida:**
+
+- `expected_language_iso` (string): Código ISO 639-1 del idioma esperado (ej: "en", "es", "fr")
+- `threshold` (float): Confianza mínima requerida (0.0 a 1.0), default 0.75
+
+**Ejemplo:**
+
+```json
+{
+  "text": "Thank you",
+  "guardrails": [
+    {
+      "name": "CorrectLanguage",
+      "config": {
+        "expected_language_iso": "en",
+        "threshold": 0.75
+      }
+    }
+  ]
+}
+```
+
+**Cómo Funciona:**
+
+1. Detecta el idioma del texto usando `fast-langdetect`
+2. Compara con el idioma esperado
+3. Si no coincide, puede traducir usando el modelo de Meta `facebook/nllb-200-distilled-600M`
+
+**Códigos ISO 639-1 Comunes:**
+
+- `en` - Inglés
+- `es` - Español
+- `fr` - Francés
+- `de` - Alemán
+- `it` - Italiano
+- `pt` - Portugués
+- `ja` - Japonés
+- `zh` - Chino
+- `ar` - Árabe
+- `ru` - Ruso
+
+**Ejemplos de validación:**
+
+- ✅ "Thank you" (en) → PASA si esperamos "en"
+- ❌ "Danke" (de) → FALLA si esperamos "en"
+- ❌ "Gracias" (es) → FALLA si esperamos "en"
+
+**Casos de Uso:**
+
+- Asegurar que respuestas de LLM están en el idioma correcto
+- Aplicaciones multilingües con idioma específico por región
+- Traducción automática cuando el idioma no coincide
+- Validar coherencia de idioma en conversaciones
+- Filtrar contenido en idiomas no deseados
+
+**Threshold:**
+
+- Más alto (0.9): Más permisivo, acepta detecciones menos seguras
+- Más bajo (0.5): Más estricto, solo acepta detecciones muy seguras
+- Default (0.75): Balance entre precisión y flexibilidad
+
+---
+
+### 8. SecretsPresent
 
 **Propósito:** Detecta secretos, API keys, tokens en el texto
 
@@ -263,7 +332,7 @@ El servicio incluye los siguientes validators pre-instalados:
 
 ---
 
-### 8. ValidURL
+### 9. ValidURL
 
 **Propósito:** Valida que el texto contenga URLs válidas
 

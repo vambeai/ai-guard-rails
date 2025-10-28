@@ -334,19 +334,20 @@ curl -X POST "http://localhost:8000/validate" \
 
 The service supports all validators available in the Guardrails Hub. Here are some commonly used ones:
 
-| Validator         | Required Config                  | Description                                  |
-| ----------------- | -------------------------------- | -------------------------------------------- |
-| `RegexMatch`      | `regex`                          | Validates text matches a regex pattern       |
-| `CompetitorCheck` | `competitors` (list)             | Detects mentions of competitor names         |
-| `ToxicLanguage`   | `threshold`, `validation_method` | Detects toxic/offensive language             |
-| `GibberishText`   | `threshold`, `validation_method` | Detects incoherent/gibberish text            |
-| `DetectPII`       | None                             | Detects personally identifiable information  |
-| `RestrictToTopic` | `valid_topics` (list)            | Ensures text stays on specified topics       |
-| `ReadingTime`     | `max_time`                       | Validates text can be read within time limit |
-| `ValidLength`     | `min`, `max`                     | Validates text length is within range        |
-| `ValidURL`        | None                             | Validates text contains valid URLs           |
-| `ValidJson`       | None                             | Validates text is valid JSON                 |
-| `SecretsPresent`  | None                             | Detects secrets/API keys in text             |
+| Validator         | Required Config                      | Description                                  |
+| ----------------- | ------------------------------------ | -------------------------------------------- |
+| `RegexMatch`      | `regex`                              | Validates text matches a regex pattern       |
+| `CompetitorCheck` | `competitors` (list)                 | Detects mentions of competitor names         |
+| `ToxicLanguage`   | `threshold`, `validation_method`     | Detects toxic/offensive language             |
+| `GibberishText`   | `threshold`, `validation_method`     | Detects incoherent/gibberish text            |
+| `CorrectLanguage` | `expected_language_iso`, `threshold` | Validates text is in expected language       |
+| `DetectPII`       | None                                 | Detects personally identifiable information  |
+| `RestrictToTopic` | `valid_topics` (list)                | Ensures text stays on specified topics       |
+| `ReadingTime`     | `max_time`                           | Validates text can be read within time limit |
+| `ValidLength`     | `min`, `max`                         | Validates text length is within range        |
+| `ValidURL`        | None                                 | Validates text contains valid URLs           |
+| `ValidJson`       | None                                 | Validates text is valid JSON                 |
+| `SecretsPresent`  | None                                 | Detects secrets/API keys in text             |
 
 For a complete list of available validators, visit [Guardrails Hub](https://hub.guardrailsai.com/).
 
